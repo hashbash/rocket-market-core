@@ -34,3 +34,5 @@ jobs:
           echo "I am $NAME"
           cd /root/rocket-market-core
           git pull
+          source venv/bin/activate
+          pip install -r requirements.txt
