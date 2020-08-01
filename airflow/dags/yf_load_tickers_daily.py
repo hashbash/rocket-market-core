@@ -4,6 +4,7 @@ from datetime import timedelta
 from airflow import DAG
 from airflow.hooks.postgres_hook import PostgresHook
 from airflow.hooks.base_hook import BaseHook
+from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
 import pandas as pd
@@ -77,3 +78,11 @@ def load_data(**context):
                                      connection={'host': ch_conn.host, 'database': ch_conn.schema,
                                                  'user': ch_conn.login, 'password': ch_conn.password})
     logging.info('Inserted %d rows' % affected_rows)
+
+
+load_data_op = PythonOperator(
+    task_id='load_data',
+    python_callable=load_data,
+    provide_context=True,
+    dag=dag
+)
