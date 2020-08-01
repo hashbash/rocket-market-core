@@ -77,7 +77,7 @@ def load_data(**context):
     logging.info('Prepared df with shape (%s, %s)' % df.shape)
     ch_hook = BaseHook(None)
     ch_conn = ch_hook.get_connection('rocket_clickhouse')
-    affected_rows = ph.to_clickhouse(df=df, table='events',
+    affected_rows = ph.to_clickhouse(df=df, table='events', index=False,
                                      connection={'host': ch_conn.host, 'database': ch_conn.schema,
                                                  'user': ch_conn.login, 'password': ch_conn.password})
     logging.info('Inserted %d rows' % affected_rows)
