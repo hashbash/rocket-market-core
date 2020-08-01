@@ -7,6 +7,7 @@ from airflow.hooks.base_hook import BaseHook
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
+import numpy as np
 import pandas as pd
 import yfinance as yf
 import pandahouse as ph
@@ -63,6 +64,8 @@ def load_data(**context):
         _df['source'] = 'yfinance'
         _df['type'] = 'history'
         _df = _df.rename(columns=columns_mapping)
+        if 'adj_close' not in _df.columns:
+            _df['adj_close'] = np.nan
         _df = _df[ch_columns]
         _df = _df[~_df.close.isna()]
 
