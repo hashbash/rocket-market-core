@@ -43,6 +43,7 @@ def load_data(**context):
         interval=frequency,
         auto_adjust=True,
         group_by='ticker',
+        progress=False,
         threads=20
     )
 
@@ -52,16 +53,16 @@ def load_data(**context):
     df = None
     for ticker in tickers:
         try:
-            _df = data[ticker]
+            _df = data[ticker].copy()
         except KeyError:
             logging.error('Ticker %s not found in data' % ticker)
             continue
-        _df.reset_index(inplace=True)
+        _df = _df.reset_index()
         _df['ticker'] = ticker
         _df['frequency'] = frequency
         _df['source'] = 'yfinance'
         _df['type'] = 'history'
-        _df.rename(columns=columns_mapping, inplace=True)
+        _df = _df.rename(columns=columns_mapping)
         _df = _df[ch_columns]
         _df = _df[~_df.close.isna()]
 
