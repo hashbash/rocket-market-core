@@ -45,7 +45,7 @@ def load_data(**context):
         auto_adjust=True,
         group_by='ticker',
         progress=False,
-        threads=20
+        threads=True
     )
 
     columns_mapping = {'Date': 'ts', 'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume',

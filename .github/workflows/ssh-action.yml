@@ -27,7 +27,7 @@ jobs:
       env:
         NAME: "Root"
       with:
-        hosts: 'root@135.181.29.56'
+        hosts: ${{ secrets.ROCKET_HOST }}
         privateKey: ${{ secrets.PRIVATE_KEY }}
         debug: false
         command: |
