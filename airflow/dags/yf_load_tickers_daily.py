@@ -35,12 +35,11 @@ def load_data(**context):
     tickers = postgres_hook.get_records('select yf_code from tickers where fetch_from_yahoo_finance')
     logging.info('Loaded %d tickers from db.' % len(tickers))
     tickers = [x[0] for x in tickers]
-    ti = context['ti']
     frequency = '1d'
     data = yf.download(
         tickers=tickers,
-        start=ti.yesterday_ds,
-        end=ti.tomorrow_ds,
+        start=context['yesterday_ds'],
+        end=context['tomorrow_ds'],
         interval=frequency,
         auto_adjust=True,
         group_by='ticker',
