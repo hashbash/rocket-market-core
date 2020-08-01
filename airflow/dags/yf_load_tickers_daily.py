@@ -1,4 +1,5 @@
 import logging
+import requests
 from datetime import timedelta
 
 from airflow import DAG
@@ -10,7 +11,6 @@ from airflow.utils.dates import days_ago
 import numpy as np
 import pandas as pd
 import yfinance as yf
-import pandahouse as ph
 
 
 default_args = {
@@ -77,10 +77,22 @@ def load_data(**context):
     logging.info('Prepared df with shape (%s, %s)' % df.shape)
     ch_hook = BaseHook(None)
     ch_conn = ch_hook.get_connection('rocket_clickhouse')
-    affected_rows = ph.to_clickhouse(df=df, table='events', index=False,
-                                     connection={'host': ch_conn.host, 'database': ch_conn.schema,
-                                                 'user': ch_conn.login, 'password': ch_conn.password})
-    logging.info('Inserted %d rows' % affected_rows)
+    data_json_each = ''
+    for i in df.index:
+        json_str = df.loc[i].to_json(date_format='iso')
+        data_json_each += json_str + '\n'
+
+    result = requests.post(url=ch_conn.host, data=data_json_each,
+                           params=dict(
+                               query='insert into rocket.events format JSONEachRow',
+                               user=ch_conn.login,
+                               password=ch_conn.password,
+                               date_time_input_format='best_effort',
+                           ))
+    if result.ok:
+        logging.info('Insert ok.')
+    else:
+        raise requests.HTTPError('Request response code: %d. Message: %s' % (result.status_code, result.text))
 
 
 load_data_op = PythonOperator(
