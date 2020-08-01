@@ -78,6 +78,7 @@ def load_data(**context):
     ch_hook = BaseHook(None)
     ch_conn = ch_hook.get_connection('rocket_clickhouse')
     data_json_each = ''
+    df.reset_index(drop=True, inplace=True)
     for i in df.index:
         json_str = df.loc[i].to_json(date_format='iso')
         data_json_each += json_str + '\n'
