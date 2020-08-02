@@ -7,6 +7,7 @@ from airflow.hooks.postgres_hook import PostgresHook
 from airflow.hooks.base_hook import BaseHook
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
+from airflow.utils.dates import parse_execution_date
 
 import numpy as np
 import pandas as pd
@@ -37,9 +38,10 @@ def load_data(**context):
     logging.info('Loaded %d tickers from db.' % len(tickers))
     tickers = [x[0] for x in tickers]
     frequency = '1d'
+    start_dt = parse_execution_date(context['yesterday_ds']) - timedelta(days=7)
     data = yf.download(
         tickers=tickers,
-        start=context['yesterday_ds'],
+        start=start_dt,
         end=context['tomorrow_ds'],
         interval=frequency,
         auto_adjust=True,
