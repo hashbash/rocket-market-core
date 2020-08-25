@@ -50,7 +50,8 @@ def load_data(**context):
         threads=True
     )
 
-    columns_mapping = {'Date': 'ts', 'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume',
+    columns_mapping = {'Datetime': 'ts', 'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close',
+                       'Volume': 'volume',
                        'Adj Close': 'adj_close'}
     ch_columns = ['ticker', 'frequency', 'source', 'type'] + list(columns_mapping.values())
     df = None
