@@ -20,7 +20,8 @@ default_args = {
     'email_on_failure': True,
     'email_on_retry': False,
     'retries': 2,
-    'retry_delay': timedelta(minutes=5)
+    'retry_delay': timedelta(minutes=5),
+    'pool': 'yfinance',
 }
 
 dag = DAG(
@@ -29,7 +30,7 @@ dag = DAG(
     schedule_interval=timedelta(hours=1),
     start_date=days_ago(30),
     catchup=False,
-    max_active_runs=1
+    max_active_runs=1,
 )
 
 
