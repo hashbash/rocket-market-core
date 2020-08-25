@@ -71,7 +71,7 @@ def load_data(**context):
             _df['adj_close'] = np.nan
         _df = _df[ch_columns]
         _df = _df[~_df.close.isna()]
-        _df = _df[~_df.volume > 0]
+        _df = _df[_df.volume > 0]
         if _df.shape[0]:
             _df['tz'] = _df.ts[0].tz.zone
             _df['ts'] = _df.ts.apply(lambda x: x.replace(tzinfo=None))
