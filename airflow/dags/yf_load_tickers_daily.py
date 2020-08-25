@@ -29,6 +29,7 @@ dag = DAG(
     schedule_interval='0 4 * * *',
     start_date=days_ago(3),
     catchup=False,
+    max_active_runs=1
 )
 
 

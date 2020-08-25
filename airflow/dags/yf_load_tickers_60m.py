@@ -29,6 +29,7 @@ dag = DAG(
     schedule_interval=timedelta(hours=1),
     start_date=days_ago(30),
     catchup=False,
+    max_active_runs=1
 )
 
 
