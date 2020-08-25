@@ -40,7 +40,7 @@ def load_data(**context):
     logging.info('Loaded %d tickers from db.' % len(tickers))
     tickers = [x[0] for x in tickers]
     frequency = '1m'
-    start_dt = parse_execution_date(context['yesterday_ds']) - timedelta(days=5)
+    start_dt = parse_execution_date(context['yesterday_ds']) - timedelta(days=2)
     data = yf.download(
         tickers=tickers,
         start=start_dt,
